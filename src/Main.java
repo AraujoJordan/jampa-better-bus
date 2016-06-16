@@ -74,13 +74,17 @@ public class Main {
 
         AStar astar = new AStar();
 
-        BussPointNode inicio = getPointByLatLng(-7.113865, -34.889959); //INTEGRACAO
-        BussPointNode fim = getPointByLatLng(-7.160302, -34.819225); //POSTO SHELL UFPB 5
+        BussPointNode integracao = getPointByLatLng(-7.113865, -34.889959);
+        BussPointNode ufpb5 = getPointByLatLng(-7.160302, -34.819225);
+        BussPointNode lagoa = getPointByLatLng(-7.124206,-34.879972);
 
-        System.out.println("Buscando rotas da integracao ao CI...");
+        BussPointNode vizinho1 = getPointByLatLng(-7.132889,-34.880213);
+        BussPointNode vizinho2 = getPointByLatLng(-7.134557,-34.878613);
+
+        System.out.println("\nBuscando rotas da integracao ao CI...");
 
         // INTEGRAÇAO - UFPB CAMPUS 5
-        LinkedList<Node> resultado = astar.findRoute(inicio, fim);
+        LinkedList<Node> resultado = astar.findRoute(vizinho1, vizinho2);
 
         System.out.println("Rotas e vizinhos recolhidas, analisando com A*...");
         for (Node node : resultado) {

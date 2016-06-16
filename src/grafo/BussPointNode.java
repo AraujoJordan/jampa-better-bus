@@ -1,11 +1,12 @@
 package grafo;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.json.JSONException;
+//import org.json.JSONObject;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -18,6 +19,8 @@ public class BussPointNode implements Node {
 
     private final String OSRMServer = "http://router.project-osrm.org/viaroute?loc=";
     private final String secondParam = "&loc=";
+
+    private HashMap<Node,Double> costCache = new HashMap<>();
 
     public BussPointNode(double[] latLng) {
         this.latLng = latLng;
@@ -32,7 +35,7 @@ public class BussPointNode implements Node {
 
         BussPointNode bussPointNode = (BussPointNode) nd;
         double nodeLatLng[] = bussPointNode.getLatLng();
-        JSONObject jsonObject = null;
+//        JSONObject jsonObject = null;
 
         final int R = 6371;
         final double dLat = deg2rad(nodeLatLng[0] - latLng[0]);
@@ -74,11 +77,14 @@ public class BussPointNode implements Node {
     @Override
     public double getCoastTo(Node nd) {
 
+//        if(costCache.containsKey(nd))
+//            return costCache.get(nd);
+
         BussPointNode bussPointNode = (BussPointNode) nd;
         double nodeLatLng[] = bussPointNode.getLatLng();
-        JSONObject jsonObject = null;
+//        JSONObject jsonObject = null;
 
-        //        DISTANCIA USANDO LINHA RETA ENTRE OS DOIS PONTOS
+//                DISTANCIA USANDO LINHA RETA ENTRE OS DOIS PONTOS
         final int R = 6371;
         final double dLat = deg2rad(nodeLatLng[0] - latLng[0]);
         final double dLon = deg2rad(nodeLatLng[1] - latLng[1]);
@@ -120,24 +126,24 @@ public class BussPointNode implements Node {
         return latLng;
     }
 
-    private String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
-        }
-        return sb.toString();
-    }
-
-    public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        InputStream is = new URL(url).openStream();
-        try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = readAll(rd);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
-        } finally {
-            is.close();
-        }
-    }
+//    private String readAll(Reader rd) throws IOException {
+//        StringBuilder sb = new StringBuilder();
+//        int cp;
+//        while ((cp = rd.read()) != -1) {
+//            sb.append((char) cp);
+//        }
+//        return sb.toString();
+//    }
+//
+//    public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+//        InputStream is = new URL(url).openStream();
+//        try {
+//            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+//            String jsonText = readAll(rd);
+//            JSONObject json = new JSONObject(jsonText);
+//            return json;
+//        } finally {
+//            is.close();
+//        }
+//    }
 }

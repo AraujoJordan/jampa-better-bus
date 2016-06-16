@@ -8,6 +8,7 @@ public class AStar {
     private Node destiny;
     private LinkedList<AStarNode> open;
     private LinkedList<AStarNode> close;
+    private LinkedList<Node> path;
 
     public AStar( ) {
         this.origin = null;
@@ -94,7 +95,7 @@ public class AStar {
         
         // Se o último adicionado é o destino, retorne
         if(this.destiny == this.close.getLast()) {
-            LinkedList<Node> path = new LinkedList<>();
+            path = new LinkedList<>();
 
             for(AStarNode node : this.close)
                 path.add(node.getNode());
