@@ -1,0 +1,12 @@
+package grafo;
+
+import java.util.LinkedList;
+/**
+ *
+ * @author Jorismar
+ */
+public interface Node {
+    public double getDistanceTo(Node nd);
+    public double getCoastTo(Node nd);
+    public LinkedList<Node> getNeighbors();
+}
