@@ -19,8 +19,11 @@ public class BussPointNode implements Node {
     private final String OSRMServer = "http://router.project-osrm.org/viaroute?loc=";
     private final String secondParam = "&loc=";
 
-    public BussPointNode(double[] latLng, LinkedList<Node> neighbors) {
+    public BussPointNode(double[] latLng) {
         this.latLng = latLng;
+    }
+
+    public void setNeighbors(LinkedList<Node> neighbors) {
         this.neighbors = neighbors;
     }
 
@@ -50,7 +53,7 @@ public class BussPointNode implements Node {
                     Math.cos(deg2rad(latLng[0])) * Math.cos(deg2rad(nodeLatLng[0])) *
                             Math.sin(dLon / 2) * Math.sin(dLon / 2);
             final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c * 1000;
+            return R * c;
 
         }
     }

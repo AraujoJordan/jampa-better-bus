@@ -96,11 +96,14 @@ public class AStar {
         if(this.destiny == this.close.getLast()) {
             LinkedList<Node> path = new LinkedList<>();
 
-            this.close.stream().forEach(
-                (nd) -> {
-                    path.add(nd.getNode());
-                }
-            );
+            for(AStarNode node : this.close)
+                path.add(node.getNode());
+
+//            this.close.stream().forEach(
+//                (nd) -> {
+//                    path.add(nd.getNode());
+//                }
+//            );
             
             return path;
         }
