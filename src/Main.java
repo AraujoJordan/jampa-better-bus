@@ -48,7 +48,7 @@ public class Main {
 
 
                 } catch (Exception limitOfArray) {
-                    for(BussPointNode bussPointNode : allBussPoints) {
+                    for (BussPointNode bussPointNode : allBussPoints) {
                         bussPointNode.setNeighbors(getNeighbors(bussPointNode));
                     }
 
@@ -69,17 +69,33 @@ public class Main {
     private static void findPaths() {
 
         AStar astar = new AStar();
+        BussPointNode inicio = getPointByLatLng(-7.160302, -34.819225); //POSTO SHELL UFPB 5
+        BussPointNode fim = getPointByLatLng(-7.113865,-34.889959); //INTEGRACAO
 
         // INTEGRAÇAO - UFPB CAMPUS 5
-        astar.findRoute();
+
+        LinkedList<Node> resultado = astar.findRoute(inicio,fim);
+        System.out.println();
+        for(Node node : resultado) {
+            BussPointNode bussPointNode = (BussPointNode) node;
+            System.out.println(bussPointNode.getLatLng());
+        }
+    }
+
+    private static BussPointNode getPointByLatLng(double lat, double longe) {
+        for (BussPointNode bussPointNode : allBussPoints) {
+            if (bussPointNode.getLatLng()[0] == lat && bussPointNode.getLatLng()[1] == longe)
+                return bussPointNode;
+        }
+        return null;
     }
 
     private static LinkedList<Node> getNeighbors(BussPointNode bussPoint) {
         LinkedList<Node> neighborsNodes = new LinkedList<>();
 
-        for(int bussDistance = 50; neighborsNodes.size() < 5; bussDistance+=50) {
+        for (int bussDistance = 50; neighborsNodes.size() < 5; bussDistance += 50) {
             for (BussPointNode bussPointFromList : allBussPoints) {
-                if(distanceInMetters(bussPoint, bussPointFromList) <= bussDistance)
+                if (distanceInMetters(bussPoint, bussPointFromList) <= bussDistance)
                     neighborsNodes.add(bussPointFromList);
             }
         }
