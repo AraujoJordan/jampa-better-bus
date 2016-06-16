@@ -18,13 +18,14 @@ public class Main {
         allBussPoints = new LinkedList<>();
 
         if (args == null) {
-            System.out.println("Parâmetro vazio! Coloque o endereço completo do arquivo JSON com os pontos de onibus");
+            System.err.println("Parâmetro vazio! Coloque o endereço completo do arquivo JSON com os pontos de onibus");
             System.exit(1);
         }
 
         try {
-            System.out.println("Obtendo pontos de onbibus do arquivo JSON...");
-            int i = 0;
+        System.err.println("Obtendo pontos de onbibus do arquivo JSON...");
+        int i = 0;
+
             while (true) {
                 String line, text = "";
                 BufferedReader reader = new BufferedReader(new FileReader(args[i]));
@@ -51,18 +52,17 @@ public class Main {
                     }
 
                 } catch (Exception limitOfArray) {
-                    System.out.println("Obtendo vizinhaça de cada ponto...");
+                    System.err.println("Obtendo vizinhaça de cada ponto...");
                     for (BussPointNode bussPointNode : allBussPoints) {
                         bussPointNode.setNeighbors(getNeighbors(bussPointNode));
                     }
-
                     findPaths();
-
                 }
                 i++;
             }
+
         } catch (ArrayIndexOutOfBoundsException eof) {
-            System.out.println("Leu todos os parâmetros.");
+            System.err.println("Leu todos os parâmetros.");
         } catch (FileNotFoundException error) {
             System.err.println("Arquivo não encontrado");
         } catch (IOException error) {
@@ -76,19 +76,20 @@ public class Main {
 
         BussPointNode integracao = getPointByLatLng(-7.113865, -34.889959);
         BussPointNode ufpb5 = getPointByLatLng(-7.160302, -34.819225);
-        BussPointNode lagoa = getPointByLatLng(-7.124206,-34.879972);
+        BussPointNode lagoa = getPointByLatLng(-7.124206, -34.879972);
 
-        BussPointNode vizinho1 = getPointByLatLng(-7.132889,-34.880213);
-        BussPointNode vizinho2 = getPointByLatLng(-7.134557,-34.878613);
+        BussPointNode vizinho1 = getPointByLatLng(-7.132889, -34.880213);
+        BussPointNode vizinho2 = getPointByLatLng(-7.134557, -34.878613);
 
-        System.out.println("\nBuscando rotas da integracao ao CI...");
+        System.err.println("Buscando rotas da integracao ao CI...");
 
         // INTEGRAÇAO - UFPB CAMPUS 5
-        LinkedList<Node> resultado = astar.findRoute(vizinho1, vizinho2);
+        LinkedList<Node> resultado = astar.findRoute(integracao, ufpb5);
 
-        System.out.println("Rotas e vizinhos recolhidas, analisando com A*...");
+        System.err.println("Rotas e vizinhos recolhidas, analisando com A* :");
         for (Node node : resultado) {
-            System.out.println(node.toString());
+            BussPointNode bussPointNode = (BussPointNode) node;
+            System.err.println("https://www.openstreetmap.org/#map=18/" + bussPointNode.getLatLng()[0] + "/" + bussPointNode.getLatLng()[1]);
         }
     }
 
@@ -102,7 +103,7 @@ public class Main {
 
     private static LinkedList<Node> getNeighbors(BussPointNode bussPoint) {
         LinkedList<Node> neighborsNodes = new LinkedList<>();
-        System.out.println("\nPonto: [" + bussPoint.getLatLng()[0] + "," + bussPoint.getLatLng()[1] + "]: ");
+//        System.err.println("\nPonto: [" + bussPoint.getLatLng()[0] + "," + bussPoint.getLatLng()[1] + "]: ");
 
         for (int bussDistance = 30; neighborsNodes.size() < 5; bussDistance += 40) {
             for (BussPointNode bussPointFromList : allBussPoints) {
@@ -110,8 +111,7 @@ public class Main {
                     if (neighborsNodes.contains(bussPointFromList))
                         continue;
                     neighborsNodes.add(bussPointFromList);
-                    System.out.print("[" + bussPointFromList.getLatLng()[0] + "," + bussPointFromList.getLatLng()[1] + "]");
-//                    neighborsNodes.add(bussPointFromList);
+//                    System.err.print("[" + bussPointFromList.getLatLng()[0] + "," + bussPointFromList.getLatLng()[1] + "]");
 //                    System.out.print("["+bussPointFromList.getLatLng()[0]+","+bussPointFromList.getLatLng()[1]+"]");
                 }
             }

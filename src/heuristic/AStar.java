@@ -60,6 +60,8 @@ public class AStar {
         
         this.close.add(this.open.remove(candidate));
 
+//        System.err.println("Nó adicionado: " + this.close.getLast().getNode().toString());
+
         for(int j = 0; j < this.close.getLast().getNode().getNeighbors().size(); j++) {
             Node node = this.close.getLast().getNode().getNeighbors().get(j);
             boolean has = false;
@@ -110,9 +112,11 @@ public class AStar {
         }
 
         // Se a lista aberta esta vazia, o caminho não existe
-        if(this.open.isEmpty())
+        if(this.open.isEmpty()) {
+//            System.err.println("Caminho não encontrado.");
             return null;
-        
+        }
+
         return this.recursiveFind();
     }
 }
