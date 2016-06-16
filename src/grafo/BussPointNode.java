@@ -34,28 +34,37 @@ public class BussPointNode implements Node {
         double nodeLatLng[] = bussPointNode.getLatLng();
         JSONObject jsonObject = null;
 
-        try {
-            jsonObject = readJsonFromUrl(OSRMServer+
-                    latLng[0]+","+latLng[1]+
-                    secondParam+
-                    nodeLatLng[0]+","+nodeLatLng[1]
-            );
-            JSONObject routeSummary = jsonObject.getJSONObject("route_summary");
-            return routeSummary.getInt("total_distance");
-        } catch (IOException e) {
-            System.err.println("Cant get distance from OSRM, get direct distance. Error: "+e.getMessage());
+        final int R = 6371;
+        final double dLat = deg2rad(nodeLatLng[0] - latLng[0]);
+        final double dLon = deg2rad(nodeLatLng[1] - latLng[1]);
+        final double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(deg2rad(latLng[0])) * Math.cos(deg2rad(nodeLatLng[0])) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
 
-            //        DISTANCIA USANDO LINHA RETA ENTRE OS DOIS PONTOS
-            final int R = 6371;
-            final double dLat = deg2rad(nodeLatLng[0] - latLng[0]);
-            final double dLon = deg2rad(nodeLatLng[1] - latLng[1]);
-            final double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(deg2rad(latLng[0])) * Math.cos(deg2rad(nodeLatLng[0])) *
-                            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c;
-
-        }
+//        try {
+//            jsonObject = readJsonFromUrl(OSRMServer+
+//                    latLng[0]+","+latLng[1]+
+//                    secondParam+
+//                    nodeLatLng[0]+","+nodeLatLng[1]
+//            );
+//            JSONObject routeSummary = jsonObject.getJSONObject("route_summary");
+//            return routeSummary.getInt("total_distance");
+//        } catch (IOException e) {
+//            System.err.println("Cant get distance from OSRM, get direct distance. Error: "+e.getMessage());
+//
+//            //        DISTANCIA USANDO LINHA RETA ENTRE OS DOIS PONTOS
+//            final int R = 6371;
+//            final double dLat = deg2rad(nodeLatLng[0] - latLng[0]);
+//            final double dLon = deg2rad(nodeLatLng[1] - latLng[1]);
+//            final double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+//                    Math.cos(deg2rad(latLng[0])) * Math.cos(deg2rad(nodeLatLng[0])) *
+//                            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+//            final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//            return R * c;
+//
+//        }
     }
 
     private double deg2rad(double deg) {
@@ -69,27 +78,37 @@ public class BussPointNode implements Node {
         double nodeLatLng[] = bussPointNode.getLatLng();
         JSONObject jsonObject = null;
 
-        try {
-            jsonObject = readJsonFromUrl(OSRMServer +
-                    latLng[0] + "," + latLng[1] +
-                    secondParam +
-                    nodeLatLng[0] + "," + nodeLatLng[1]
-            );
-            JSONObject routeSummary = jsonObject.getJSONObject("route_summary");
-            return routeSummary.getInt("total_time"); //TEMPO DO PERCUSSO
-        } catch (IOException e) {
-            System.err.println("Cant get time from OSRM, get direct distance. Error: "+e.getMessage());
+        //        DISTANCIA USANDO LINHA RETA ENTRE OS DOIS PONTOS
+        final int R = 6371;
+        final double dLat = deg2rad(nodeLatLng[0] - latLng[0]);
+        final double dLon = deg2rad(nodeLatLng[1] - latLng[1]);
+        final double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(deg2rad(latLng[0])) * Math.cos(deg2rad(nodeLatLng[0])) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c * 125; //1km vai demorar 7min
 
-            //        DISTANCIA USANDO LINHA RETA ENTRE OS DOIS PONTOS
-            final int R = 6371;
-            final double dLat = deg2rad(nodeLatLng[0] - latLng[0]);
-            final double dLon = deg2rad(nodeLatLng[1] - latLng[1]);
-            final double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(deg2rad(latLng[0])) * Math.cos(deg2rad(nodeLatLng[0])) *
-                            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c * 125; //1km vai demorar 7min
-        }
+//        try {
+//            jsonObject = readJsonFromUrl(OSRMServer +
+//                    latLng[0] + "," + latLng[1] +
+//                    secondParam +
+//                    nodeLatLng[0] + "," + nodeLatLng[1]
+//            );
+//            JSONObject routeSummary = jsonObject.getJSONObject("route_summary");
+//            return routeSummary.getInt("total_time"); //TEMPO DO PERCUSSO
+//        } catch (IOException e) {
+//            System.err.println("Cant get time from OSRM, get direct distance. Error: "+e.getMessage());
+//
+//            //        DISTANCIA USANDO LINHA RETA ENTRE OS DOIS PONTOS
+//            final int R = 6371;
+//            final double dLat = deg2rad(nodeLatLng[0] - latLng[0]);
+//            final double dLon = deg2rad(nodeLatLng[1] - latLng[1]);
+//            final double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+//                    Math.cos(deg2rad(latLng[0])) * Math.cos(deg2rad(nodeLatLng[0])) *
+//                            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+//            final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//            return R * c * 125; //1km vai demorar 7min
+//        }
     }
 
     @Override

@@ -18,11 +18,12 @@ public class Main {
         allBussPoints = new LinkedList<>();
 
         if (args == null) {
-            System.err.println("Parâmetro vazio! Coloque o endereço completo do arquivo JSON com os pontos de onibus");
+            System.out.println("Parâmetro vazio! Coloque o endereço completo do arquivo JSON com os pontos de onibus");
             System.exit(1);
         }
 
         try {
+            System.out.println("Obtendo pontos de onbibus do arquivo JSON...");
             int i = 0;
             while (true) {
                 String line, text = "";
@@ -42,12 +43,15 @@ public class Main {
                         latLngDouble[0] = (double) latLng.get(1);
                         latLngDouble[1] = (double) latLng.get(0);
 
+                        if(latLngDouble[0]==-1.7976931348623157E308 || latLngDouble[1]==-1.7976931348623157E308)
+                            continue;
+
                         allBussPoints.add(new BussPointNode(latLngDouble));
 //                        System.out.println("https://www.openstreetmap.org/#map=18/" + latLng.get(1) + "/" + latLng.get(0));
                     }
 
-
                 } catch (Exception limitOfArray) {
+                    System.out.println("Obtendo vizinhaça de cada ponto...");
                     for (BussPointNode bussPointNode : allBussPoints) {
                         bussPointNode.setNeighbors(getNeighbors(bussPointNode));
                     }
@@ -69,16 +73,18 @@ public class Main {
     private static void findPaths() {
 
         AStar astar = new AStar();
-        BussPointNode inicio = getPointByLatLng(-7.160302, -34.819225); //POSTO SHELL UFPB 5
-        BussPointNode fim = getPointByLatLng(-7.113865,-34.889959); //INTEGRACAO
+
+        BussPointNode inicio = getPointByLatLng(-7.113865, -34.889959); //INTEGRACAO
+        BussPointNode fim = getPointByLatLng(-7.160302, -34.819225); //POSTO SHELL UFPB 5
+
+        System.out.println("Buscando rotas da integracao ao CI...");
 
         // INTEGRAÇAO - UFPB CAMPUS 5
+        LinkedList<Node> resultado = astar.findRoute(inicio, fim);
 
-        LinkedList<Node> resultado = astar.findRoute(inicio,fim);
-        System.out.println();
-        for(Node node : resultado) {
-            BussPointNode bussPointNode = (BussPointNode) node;
-            System.out.println(bussPointNode.getLatLng());
+        System.out.println("Rotas e vizinhos recolhidas, analisando com A*...");
+        for (Node node : resultado) {
+            System.out.println(node.toString());
         }
     }
 
@@ -92,13 +98,21 @@ public class Main {
 
     private static LinkedList<Node> getNeighbors(BussPointNode bussPoint) {
         LinkedList<Node> neighborsNodes = new LinkedList<>();
+        System.out.println("\nPonto: [" + bussPoint.getLatLng()[0] + "," + bussPoint.getLatLng()[1] + "]: ");
 
-        for (int bussDistance = 50; neighborsNodes.size() < 5; bussDistance += 50) {
+        for (int bussDistance = 30; neighborsNodes.size() < 5; bussDistance += 40) {
             for (BussPointNode bussPointFromList : allBussPoints) {
-                if (distanceInMetters(bussPoint, bussPointFromList) <= bussDistance)
+                if (distanceInMetters(bussPoint, bussPointFromList) <= bussDistance) {
+                    if (neighborsNodes.contains(bussPointFromList))
+                        continue;
                     neighborsNodes.add(bussPointFromList);
+                    System.out.print("[" + bussPointFromList.getLatLng()[0] + "," + bussPointFromList.getLatLng()[1] + "]");
+//                    neighborsNodes.add(bussPointFromList);
+//                    System.out.print("["+bussPointFromList.getLatLng()[0]+","+bussPointFromList.getLatLng()[1]+"]");
+                }
             }
         }
+//        System.out.println("Foram encontrados de:" + bussPoint.getLatLng()[0] + " " + bussPoint.getLatLng()[1] + ", "+neighborsNodes.size()+" pontos!");
         return neighborsNodes;
     }
 
@@ -110,7 +124,7 @@ public class Main {
                 Math.cos(deg2rad(p2.getLatLng()[0])) * Math.cos(deg2rad(p1.getLatLng()[0])) *
                         Math.sin(dLon / 2) * Math.sin(dLon / 2);
         final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
+        return R * c * 1000;
     }
 
     private static double deg2rad(double deg) {
