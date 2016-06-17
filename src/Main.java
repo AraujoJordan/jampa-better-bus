@@ -54,25 +54,25 @@ public class Main {
 
                 } catch (Exception limitOfArray) {
                     System.err.println("Obtendo vizinhaça de cada ponto...");
-                    Date d1 = new Date();
-                    Date d2;
-                    for (final BussPointNode bussPointNode : allBussPoints) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                bussPointNode.setNeighbors(getNeighbors(bussPointNode));
-                            }
-                        }).start();
+//                    Date d1 = new Date();
+//                    Date d2;
+//                    for (final BussPointNode bussPointNode : allBussPoints) {
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                bussPointNode.setNeighbors(getNeighbors(bussPointNode));
+//                            }
+//                        }).start();
 //                        bussPointNode.setNeighbors(getNeighbors(bussPointNode));
-                    }
-                    d2 = new Date();
-                    System.err.println("D2-D1: "+(d2.getTime()-d1.getTime()));
-                    d1 = new Date();
-                    for (final BussPointNode bussPointNode : allBussPoints)
+//                    }
+//                    d2 = new Date();
+//                    System.err.println("D2-D1: "+(d2.getTime()-d1.getTime()));
+//                    d1 = new Date();
+                    for (BussPointNode bussPointNode : allBussPoints)
                         bussPointNode.setNeighbors(getNeighbors(bussPointNode));
-                    d2 = new Date();
-                    System.err.println("D2-D1: "+(d2.getTime()-d1.getTime()));
-//                    findPaths();
+//                    d2 = new Date();
+//                    System.err.println("D2-D1: "+(d2.getTime()-d1.getTime()));
+                    findPaths();
                 }
                 i++;
             }
@@ -97,12 +97,12 @@ public class Main {
         BussPointNode vizinho1 = getPointByLatLng(-7.132889, -34.880213);
         BussPointNode vizinho2 = getPointByLatLng(-7.134557, -34.878613);
 
-        System.err.println("Buscando rotas da integracao ao CI...");
+        System.err.println("Buscando rotas com A* (Vai demorar mais de 15 min)...");
 
         // INTEGRAÇAO - UFPB CAMPUS 5
-        LinkedList<Node> resultado = astar.findRoute(integracao, vizinho1);
+        LinkedList<Node> resultado = astar.findRoute(lagoa, ufpb5);
 
-        System.err.println("Rotas e vizinhos recolhidas, analisando com A* :");
+        System.err.println("Rotas e vizinhos recolhidas");
         for (Node node : resultado) {
             BussPointNode bussPointNode = (BussPointNode) node;
             System.err.println("https://www.openstreetmap.org/#map=18/" + bussPointNode.getLatLng()[0] + "/" + bussPointNode.getLatLng()[1]);
@@ -121,7 +121,7 @@ public class Main {
         LinkedList<Node> neighborsNodes = new LinkedList<>();
 //        System.err.println("\nPonto: [" + bussPoint.getLatLng()[0] + "," + bussPoint.getLatLng()[1] + "]: ");
 
-        for (int bussDistance = 30; neighborsNodes.size() < 5; bussDistance += 40) {
+        for (int bussDistance = 30; neighborsNodes.size() < 10; bussDistance += 40) {
             for (BussPointNode bussPointFromList : allBussPoints) {
                 if (distanceInMetters(bussPoint, bussPointFromList) <= bussDistance) {
                     if (neighborsNodes.contains(bussPointFromList))

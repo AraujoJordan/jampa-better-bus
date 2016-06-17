@@ -82,7 +82,7 @@ public class BussPointNode implements Node {
     @Override
     public double getCoastTo(Node nd) {
         if (costCache.containsKey(nd)) {
-            System.err.println("Pegando o tempo pelo OSRM server (CACHE)");
+//            System.err.println("Pegando o tempo pelo OSRM server (CACHE)");
             return costCache.get(nd);
         }
 
@@ -108,10 +108,10 @@ public class BussPointNode implements Node {
             );
             JSONObject routeSummary = jsonObject.getJSONObject("route_summary");
             costCache.put(nd,routeSummary.getInt("total_time"));
-            System.err.println("Pegando o tempo pelo OSRM server (ONLINE)");
+//            System.err.println("Pegando o tempo pelo OSRM server (ONLINE)");
             return routeSummary.getInt("total_time"); //TEMPO DO PERCUSSO
         } catch (IOException e) {
-            System.err.println("Pegando o tempo pela linha reta dos pontos");
+//            System.err.println("Pegando o tempo pela linha reta dos pontos");
 
             //  DISTANCIA USANDO LINHA RETA ENTRE OS DOIS PONTOS
             final int R = 6371;
