@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -53,10 +54,25 @@ public class Main {
 
                 } catch (Exception limitOfArray) {
                     System.err.println("Obtendo vizinhaça de cada ponto...");
-                    for (BussPointNode bussPointNode : allBussPoints) {
-                        bussPointNode.setNeighbors(getNeighbors(bussPointNode));
+                    Date d1 = new Date();
+                    Date d2;
+                    for (final BussPointNode bussPointNode : allBussPoints) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                bussPointNode.setNeighbors(getNeighbors(bussPointNode));
+                            }
+                        }).start();
+//                        bussPointNode.setNeighbors(getNeighbors(bussPointNode));
                     }
-                    findPaths();
+                    d2 = new Date();
+                    System.err.println("D2-D1: "+(d2.getTime()-d1.getTime()));
+                    d1 = new Date();
+                    for (final BussPointNode bussPointNode : allBussPoints)
+                        bussPointNode.setNeighbors(getNeighbors(bussPointNode));
+                    d2 = new Date();
+                    System.err.println("D2-D1: "+(d2.getTime()-d1.getTime()));
+//                    findPaths();
                 }
                 i++;
             }
@@ -84,7 +100,7 @@ public class Main {
         System.err.println("Buscando rotas da integracao ao CI...");
 
         // INTEGRAÇAO - UFPB CAMPUS 5
-        LinkedList<Node> resultado = astar.findRoute(integracao, ufpb5);
+        LinkedList<Node> resultado = astar.findRoute(integracao, vizinho1);
 
         System.err.println("Rotas e vizinhos recolhidas, analisando com A* :");
         for (Node node : resultado) {

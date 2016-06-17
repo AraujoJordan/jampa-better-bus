@@ -96,7 +96,7 @@ public class AStar {
         }
         
         // Se o último adicionado é o destino, retorne
-        if(this.destiny == this.close.getLast()) {
+        if(this.destiny == this.close.getLast().getNode()) {
             path = new LinkedList<>();
 
             for(AStarNode node : this.close)
